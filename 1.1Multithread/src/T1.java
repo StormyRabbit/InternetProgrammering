@@ -1,4 +1,4 @@
-package com.company;
+
 
 
 public class T1 extends Thread {

@@ -1,5 +1,3 @@
-package com.company;
-
 
 public class T2 implements Runnable {
     private Thread thread;
