@@ -1,9 +1,16 @@
-
-
+/**
+ * Main class for testing two different implementation of multithreading.
+ * Coded for use in the course internet programming at DSV Stockholms University Autumn 2017.
+ * @author Lasse
+ */
 public class Main {
     private T1 t1;
     private T2 t2;
 
+    /**
+     * Default constructor.
+     * Starts the process of spawning and killing threads.
+     */
     public Main() {
         createAndStartT1();
         fiveSecondSleep();
@@ -13,6 +20,7 @@ public class Main {
         fiveSecondSleep();
         killThreadTwo();
     }
+
 
     private void killThreadOne() {
         printImportantMessage("Killing thread one");
@@ -50,6 +58,10 @@ public class Main {
         }
     }
 
+    /**
+     * EntryPoint method responsible for calling {@link Main#Main()}.
+     * @param args not used.
+     */
     public static void main(String[] args) {
         new Main();
     }
