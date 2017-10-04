@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -5,18 +6,32 @@ import java.net.Socket;
 public class Main {
     private ServerSocket serSocket;
     private int port = 2000;
-    private ConnectedClient ch;
     private ChatManager cm;
+    private JFrame window;
 
     public Main(String[] args) {
+        super();
         if(args.length > 0)
             port = Integer.valueOf(args[0]);
 
+        window = new JFrame();
+        window.setVisible(true);
         setupSocket();
-        cm = new ChatManager();
+        cm = new ChatManager(this);
         listenForRequests();
+
     }
 
+    public void updateTitle() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("IP: ");
+        sb.append(serSocket.getInetAddress().getHostName());
+        sb.append("PORT: ");
+        sb.append(port);
+        sb.append("CONNECTED USERS: ");
+        sb.append(cm.getNumConUsers());
+        window.setTitle(sb.toString());
+    }
 
     private void listenForRequests() {
         while(true)
@@ -27,6 +42,7 @@ public class Main {
         try {
             Socket clientSocket = serSocket.accept();
             cm.addClient(new ConnectedClient(clientSocket, cm));
+            updateTitle();
         }catch(IOException ioe ) {
             System.out.println("HandleRequest IOException");
         }
@@ -36,7 +52,7 @@ public class Main {
         try {
             serSocket = new ServerSocket(port);
         }catch(IOException ioe) {
-            System.out.println("SerSocket IOException");
+            ioe.printStackTrace();
         }
     }
 

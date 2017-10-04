@@ -6,11 +6,13 @@ public class ChatManager extends Thread {
     private Queue<String> msgQueue;
     private boolean alive;
     private List<ConnectedClient> conList;
+    private Main main;
 
-    public ChatManager() {
+    public ChatManager(Main main) {
         msgQueue = new LinkedList<>();
         alive = true;
         conList = new LinkedList<>();
+        this.main = main;
         this.start();
     }
 
@@ -18,6 +20,10 @@ public class ChatManager extends Thread {
     public void run() {
         while(alive)
             handleQueue();
+    }
+
+    public int getNumConUsers() {
+        return conList.size();
     }
 
     public void addClient(ConnectedClient cc) {
@@ -34,17 +40,16 @@ public class ChatManager extends Thread {
             broadCastMsg(msgQueue.poll());
     }
 
-    public void disconnectClient(ConnectedClient cc) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Client disconnected: ");
-        sb.append(cc.getClientSocket().getInetAddress().getHostName());
-        broadCastMsg(sb.toString());
-        conList.remove(cc);
+    public synchronized void disconnectClient(ConnectedClient cc) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Client disconnected: ");
+            sb.append(cc.getClientSocket().getInetAddress().getHostName());
+            broadCastMsg(sb.toString());
+            conList.remove(cc);
+            main.updateTitle();
     }
 
-    public void broadCastMsg(String s) {
-        System.out.println(s);
-
+    public synchronized void broadCastMsg(String s) {
         for(ConnectedClient cc : conList) {
             cc.sendMessage(s);
         }

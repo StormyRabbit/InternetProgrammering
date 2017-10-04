@@ -52,7 +52,6 @@ public class ConnectedClient extends Thread {
             while( (msg = in.readLine()) != null )
                 cm.broadCastMsg(msg);
 
-            // if client disconnected
             out.close();
             in.close();
             clientSocket.close();
