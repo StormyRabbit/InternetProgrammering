@@ -5,7 +5,7 @@ import java.net.Socket;
 public class RestfulView extends Thread {
     private boolean isRunning;
     private ServerSocket socket;
-
+    private Socket clientSocket;
     public RestfulView() {
         setupSocket();
         isRunning = true;
@@ -28,7 +28,7 @@ public class RestfulView extends Thread {
 
     private void listenForRequests() {
         try(Socket connection = socket.accept()) {
-            connection.getInputStream();
+
         }catch (IOException ioe) {
             System.out.println(ioe);
         }
