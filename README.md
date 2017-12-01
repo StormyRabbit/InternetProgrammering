@@ -1,4 +1,4 @@
-# InternetProgrammering
+# Internet Programming, Stationary Units - HT17 - Stockholms University
 
 ## Obligatory Exercises ##
 
