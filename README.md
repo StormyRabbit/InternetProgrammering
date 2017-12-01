@@ -1,6 +1,6 @@
 # InternetProgrammering
 
-# Obligatory Exercises #
+## Obligatory Exercises ##
 
 1.1 Multithreading
 1.2 Packeting
@@ -15,7 +15,7 @@
 
 3.2.1 E-mail transfer
 
-# Optional Exercises #
+## Optional Exercises ##
 
 2.1.3 Stream socket XML
 
