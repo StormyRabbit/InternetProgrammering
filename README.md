@@ -2,11 +2,11 @@
 
 ## Obligatory Exercises ##
 
-1.1 Multithreading
+1.1 Multithreading - DONE
 
-1.2 Packeting
+1.2 Packeting - DONE 
 
-1.3 Javadocs
+1.3 Javadocs - DONE 
 
 2.1.1 Stream sockets clientside
 
@@ -26,9 +26,9 @@
 
 3.3.6 Webservices
 
-4.1.1 Symetric crypt/decrypt
+4.1.1 Symetric crypt/decrypt - DONE 
 
-4.1.2 sign/verify asymetric
+4.1.2 sign/verify asymetric - DONE 
 
 4.1.3 sign/verify asymentric & cert
 

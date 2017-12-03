@@ -1,5 +1,6 @@
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -15,19 +16,36 @@ public class SignHandler {
     private Signature sig;
     private Certificate cert;
 
+
     public SignHandler(String[] args) throws Exception {
         loadKeystore(args[0], args[1]);
         loadPrivateKey(args[2], args[3]);
         loadData(args[4]);
         setupCertificate(args[5]);
         setupSignature(args[6]);
-        // 4 data
-        // 5 cert
-        // signature
+        signData(args[4]);
+        createCert(args[5], args[2]);
+    }
+
+    private void signData(String signaturePath) throws Exception {
+
+    }
+
+    private void createCert(String certFileName, String alias) throws Exception {
+        cert = ks.getCertificate(alias);
+        FileOutputStream fis = new FileOutputStream(certFileName);
+        fis.write(cert.getEncoded());
+        fis.close();
     }
 
     private void loadData(String dataFilePath) throws Exception {
         bis = new BufferedInputStream(new FileInputStream(dataFilePath));
+        byte[] inByte = new byte[1024];
+        while(bis.available() != 0) {
+            int length = bis.read(inByte);
+            sig.update(inByte, 0, length);
+        }
+        bis.close();
 
     }
 
