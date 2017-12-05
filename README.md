@@ -1,4 +1,5 @@
 # Internet Programming, Stationary Units - HT17 - Stockholms University
+All exercises done in java unless otherwise stated below.
 
 ## Obligatory Exercises ##
 
