@@ -25,6 +25,7 @@ public class ChatClient {
         }catch(IOException ioe){
             System.out.println("connection refused!");
         }
+        System.out.format("Connected to %s on port: %d \n", ip, port);
     }
 
     private void setupReader() {
