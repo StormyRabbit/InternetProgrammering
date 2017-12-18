@@ -15,7 +15,7 @@ All exercises done in java unless otherwise stated below.
 
 2.2.1 Datagram socket unicast - DONE
 
-3.1.2 Database connection
+3.1.2 Database connection - DONE
 
 3.2.1 E-mail transfer
 

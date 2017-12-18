@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.regex.*;
 
 public class Gui extends JFrame {
 
@@ -26,7 +27,11 @@ public class Gui extends JFrame {
     // rest
     private MySQLManager mySQL;
 
+    private Pattern p = Pattern.compile("<.*>");
     public Gui () {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception e) {}
         this.setLayout(new BorderLayout());
         setupNewEntryPanel();
         setupAllEntriesPanel();
@@ -72,11 +77,19 @@ public class Gui extends JFrame {
 
     private GuestBookEntry createGBE() {
         GuestBookEntry gbe = new GuestBookEntry();
-        gbe.setName(nameField.getText());
-        gbe.setEmail(emailField.getText());
-        gbe.setHomepage(homepageField.getText());
-        gbe.setMessage(inMessageArea.getText());
+
+        gbe.setName(scrubString(nameField.getText()));
+        gbe.setEmail(scrubString(emailField.getText()));
+        gbe.setHomepage(scrubString(homepageField.getText()));
+        gbe.setMessage(scrubString(inMessageArea.getText()));
         return gbe;
+    }
+
+    private String scrubString(String s) {
+        Matcher matcher = p.matcher(s);
+        if(matcher.matches())
+            return "censur";
+        else return s;
     }
 
     private void refreshGuestbook() {
