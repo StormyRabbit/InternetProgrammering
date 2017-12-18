@@ -13,18 +13,17 @@ public class Main {
      */
     public Main() {
         createAndStartT1();
-        fiveSecondSleep();
+        goToSleep(5000);
         createAndStartT2();
-        fiveSecondSleep();
+        goToSleep(5000);
         killThreadOne();
-        fiveSecondSleep();
+        goToSleep(5000);
         killThreadTwo();
     }
 
 
     private void killThreadOne() {
         printImportantMessage("Killing thread one");
-
         t1.stopThread();
     }
 
@@ -50,9 +49,9 @@ public class Main {
         t2 = new T2();
     }
 
-    private void fiveSecondSleep() {
+    private void goToSleep(int sleepInMS) {
         try{
-            Thread.sleep(5000);
+            Thread.sleep(sleepInMS);
         }catch(InterruptedException ie) {
 
         }
