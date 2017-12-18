@@ -8,25 +8,26 @@ import java.util.*;
 public class GUI extends JFrame implements guiObserver {
     private Paper p = new Paper();
     private UDPSender sender;
-    private DatagramSocket socket;
+    private UDPReceiver udpr;
+    private Queue<Point> queue;
+    
     public static void main(String[] args) {
         new GUI(args);
     }
-    private UDPReceiver udpr;
-
 
     public GUI(String[] args) {
+        queue = new LinkedList();
+        try {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().add(p, BorderLayout.CENTER);
         setSize(640, 480);
         setVisible(true);
-        try {
-            socket = new DatagramSocket(3979);
-        }catch(SocketException se) {}
-
-        sender = new UDPSender(args, socket);
-        udpr = new UDPReceiver(socket, this);
+        sender = new UDPSender(args);
+        udpr = new UDPReceiver(args, this);
         p.addMouseListeners(new L1(), new L2());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(Point point) {
@@ -37,7 +38,7 @@ public class GUI extends JFrame implements guiObserver {
         public void mousePressed(MouseEvent me) {
             Point point = me.getPoint();
             p.addPoint(point);
-            sender.addPointToQueue(point);
+            sender.sendPoint(point);
         }
     }
 
@@ -45,7 +46,7 @@ public class GUI extends JFrame implements guiObserver {
         public void mouseDragged(MouseEvent me) {
             Point point = me.getPoint();
             p.addPoint(point);
-            sender.addPointToQueue(point);
+            sender.sendPoint(point);
         }
     }
 
@@ -63,7 +64,7 @@ class Paper extends JPanel {
         addMouseMotionListener(l2);
     }
 
-    public void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.black);
         Iterator i = hs.iterator();
@@ -73,7 +74,7 @@ class Paper extends JPanel {
         }
     }
 
-    public void addPoint(Point p) {
+    public synchronized void addPoint(Point p) {
         hs.add(p);
         repaint();
     }

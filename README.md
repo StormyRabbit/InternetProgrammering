@@ -9,9 +9,9 @@ All exercises done in java unless otherwise stated below.
 
 1.3 Javadocs - DONE 
 
-2.1.1 Stream sockets clientside
+2.1.1 Stream sockets clientside - DONE
 
-2.1.2 Stream sockets serverside
+2.1.2 Stream sockets serverside - DONE
 
 2.2.1 Datagram socket unicast
 
