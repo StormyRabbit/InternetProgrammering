@@ -15,6 +15,8 @@ public class Main {
             port = Integer.valueOf(args[0]);
 
         window = new JFrame();
+        JLabel jl = new JLabel("OBS! detta fönster används enbart för titel baren, resterande information skrivs ut i terminalen");
+        window.add(jl);
         window.setVisible(true);
         setupSocket();
         cm = new ChatManager(this);
