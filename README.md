@@ -31,7 +31,7 @@ All exercises done in java unless otherwise stated below.
 
 4.1.2 sign/verify asymetric - DONE 
 
-4.1.3 sign/verify asymentric & cert
+4.1.3 sign/verify asymentric & cert - DONE
 
 4.2.3 Attack!
 
