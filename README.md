@@ -23,6 +23,8 @@ All exercises done in java unless otherwise stated below.
 
 2.1.3 Stream socket XML - DONE
 
+2.1.4 Stream Socket File - DONE
+
 3.1.1 Webserver connection - DONE
 
 3.3.6 Webservices
