@@ -27,7 +27,7 @@ All exercises done in java unless otherwise stated below.
 
 3.1.1 Webserver connection - DONE
 
-3.3.6 Webservices
+3.3.6 Webservices - DONE (python)
 
 4.1.1 Symetric crypt/decrypt - DONE 
 
