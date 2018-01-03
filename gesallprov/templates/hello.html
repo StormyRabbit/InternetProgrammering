@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link rel="stylesheet" type="text/css" href="static/style.css">
+    <title>STR's PenSUITE</title>
+<script>
+    function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    }
+</script>
+</head>
+<body>
+    <ul id="navigation" class="tab">
+            {% for item in navigation %}
+            <button class="tablinks"  onclick="openCity(event, '{{item.toolName}}')" id="defaultOpen"> {{item.toolName}}</button>
+            {% endfor %}
+    </ul>
+    <script>
+        document.getElementById("defaultOpen").click();
+    </script>
+      <!-- Tab content -->
+      <div id="Port Scan" class="tabcontent">
+        <h3>Port Scanner</h3>
+        <form method="post">
+            <h2>IP-Address</h2>
+            <input type="text" name="address"/>
+            <h5>Low end port range</h5>
+            <input type="text" name="scanLowEnd"/>
+            <h5>Low end port range</h5>
+            <input type="text" name="scanHighEnd" />
+            <input type="submit" name="startScan" value="Start Port Scan"/>
+
+        <table style="width:100%">
+        <tr>
+            <th colspan="2">{{address}}</th>
+        </tr>
+        <tr>
+            {% for port in result %}
+            <td>port.key</td>
+            <td>port.value</td>
+            {% endfor %}
+        </tr>
+        </table>
+        </form>
+      </div>
+
+
+      
+      <div id="Paris" class="tabcontent">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+      </div>
+      
+      <div id="Tokyo" class="tabcontent">
+        <h3>Tokyo</h3>
+        <p>Tokyo is the capital of Japan.</p>
+      </div>
+</body>
+</html>
