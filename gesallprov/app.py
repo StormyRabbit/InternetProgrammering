@@ -1,25 +1,70 @@
-from flask import Flask, render_template, request, flash
+#!/bin/python3
+from flask import Flask, render_template, request
 from PortScanner import PortScanner
-import socket
 from IO import *
 from EncryptionMgr import EncryptionMgr
 from forms import *
 from table import *
 app = Flask(__name__)
+# APPLICATION OBJECTS
 ps = PortScanner()
+xmlExp = XMLExporter()
+em = EncryptionMgr()
+# TEMPLATE VARIABLES
 app.secret_key = "HEMLIS"
 navigation = [{'toolName': 'Port Scan'}]
-test_struct = {'85.24.253.25': {'open_ports': ['200', '500', '300', '500', '300', '500', '300']},
-               '85.24.100.25': {'open_ports': ['1', '2', '3', '4', '5', '6', '7']}}
 
 
 @app.route("/", methods=['GET', 'POST'])
-def hello():
+def index():
     if request.method == 'POST':
         _handle_post()
+    return render_template('index.html', table=_build_table(),
+                           scan_form=ScanForm(), sql_form=SqlForm(),
+                           keyLoaded=em.isKeyLoaded)
 
-    return render_template('testing.html', table=_build_table(),
-                           scan_form=ScanForm(), sql_form=SqlForm(), xml_form=XmlForm())
+
+@app.route("/createKeyFile", methods=['POST'])
+def create_key_file():
+    em.create_rnd_key_file(request.get_json()['file_name'])
+    return "200"
+
+
+@app.route("/loadKeyFile", methods=['POST'])
+def load_key_file():
+    em.load_key_file(request.get_json()['file_name'])
+    return "200"
+
+
+@app.route("/loadXML", methods=['POST'])
+def _load_result_xml():
+    ps.result.clear()
+    ps.result = xmlExp.load_from_xml(request.get_json()['file_name'])
+    return "200"
+
+
+@app.route("/saveEncryptedXML", methods=['POST'])
+def save_encrypted_xml():
+    xml_result = xmlExp.create_xml(ps.result)
+    xmlString = xmlExp.stringify(xml_result)
+    em.save_with_key_file(request.get_json()['file_name'], xmlString)
+    return "200"
+
+
+@app.route("/loadEncryptedXML", methods=['POST'])
+def load_encrypted_xml():
+    ps.result.clear()
+    em.load_encrypted_file(request.get_json()['file_name'])
+    decrypted_xml = em.decrypt(em.encrypted_data, em.loadedKey)
+    ps.result = xmlExp.load_from_xml_string(decrypted_xml)
+    return "200"
+
+
+@app.route("/saveXML", methods=['POST'])
+def _save_result_xml():
+    xml = xmlExp.create_xml(ps.result)
+    xmlExp.write_xml_to_file(xml, request.get_json()['file_name'])
+    return "200"
 
 
 def _handle_post():
@@ -44,6 +89,5 @@ def start_scan():
     ps.scan_address(address, port_low_end=port_low, port_high_end=port_high, udp_mode=udp_mode)
 
 
-
-
-
+if __name__ == "__main__":
+    app.run(host='127.0.0.1', port=5000)

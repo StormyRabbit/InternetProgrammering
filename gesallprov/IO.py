@@ -1,6 +1,6 @@
 from lxml import etree
 import pymysql
-from EncryptionMgr import EncryptionMgr
+from io import StringIO
 
 
 class SqlExporter:
@@ -20,7 +20,6 @@ class SqlExporter:
     def create_table(self):
         if self.connection is None:
             raise TypeError("Connection is None, call connect first")
-
         table_creation_query = "CREATE TABLE portScan(ADDRESS CHAR(15) NOT NULL, PORT CHAR(5) NOT NULL)"
         self.cursor.execute(table_creation_query)
         self.connection.commit()
@@ -72,22 +71,36 @@ class XMLExporter:
         etree.ElementTree(tree).write(file_name, pretty_print=True, xml_declaration=True, encoding="utf-8")
 
     @staticmethod
-    def encrypted_write_xml_to_file(tree, key, file_name):
-        em = EncryptionMgr()
+    def encrypted_write_xml_to_file(em, tree, key, file_name):
         encrypted_tree = em.encrypt(tree, key)
         em.write_encrypted_to_file(encrypted_tree, file_name)
 
     @staticmethod
-    def create_xml( results):
+    def stringify(xml):
+        return etree.tostring(xml)
+
+    @staticmethod
+    def create_xml(results):
         root = etree.Element("PortScanResults")
-        print(results)
         for ip, result in results.items():
             entity = etree.SubElement(root, 'PortScanEntity')
             ip_address = etree.SubElement(entity, 'ip')
             ip_address.text = ip
             for port in result['open_ports']:
-                etree.SubElement(entity, 'port').text = port
+                etree.SubElement(entity, 'port').text = str(port)
         return root
+
+    def load_from_xml_string(self, xml_string):
+        ret_struct = {}
+        root = etree.fromstring(xml_string)
+        for _, b in etree.iterwalk(root, tag='PortScanEntity'):
+            for entry in b:
+                if entry.tag == 'ip':
+                    current_address = entry.text
+                    ret_struct[current_address] = {'open_ports': []}
+                if entry.tag == 'port':
+                    ret_struct[current_address]['open_ports'].append(entry.text)
+        return ret_struct
 
     @staticmethod
     def load_from_xml(file_name):
@@ -100,3 +113,4 @@ class XMLExporter:
                 if entry.tag == 'port':
                     ret_struct[current_address]['open_ports'].append(entry.text)
         return ret_struct
+

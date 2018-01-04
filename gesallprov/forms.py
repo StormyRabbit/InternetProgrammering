@@ -9,10 +9,8 @@ class ScanForm(FlaskForm):
 
 
 class XmlForm(FlaskForm):
-    uploadFile = FileField("Upload XML")
     uploadKeyFile = FileField("Upload Key file")
-    keyPhrase = StringField("Start Port")
-    endPort = IntegerField("End Port")
+    keyPhrase = StringField("Create key")
 
 
 class SqlForm(FlaskForm):

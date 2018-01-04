@@ -37,8 +37,6 @@ class PortScanner:
         for port in range(port_low_end, port_high_end + 1):
             self.check_port(address, port, udp_mode)
 
-        print(self.result)
-
     def load_addresses_from_file(self):
         file = input('enter file path:')
         if os.path.isfile(file):
