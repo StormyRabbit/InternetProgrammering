@@ -12,6 +12,12 @@ public class EncryptHandler {
     private static final String ALGORITHM = "Blowfish/ECB/PKCS5Padding";
 
     public EncryptHandler(String[] args) throws Exception {
+        /**
+         * constructor, takes parameter from the launch input and passes it to the needed subprocess.
+         * 0 = in data
+         * 1 = secretkeyfile
+         * 2 = outfile
+         */
         loadFile(args[0]);
         loadSecretKey(args[1]);
         setupCipher();
@@ -19,21 +25,25 @@ public class EncryptHandler {
     }
 
     private void setupCipher() throws Exception {
+        // setup the cipher object
         cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
     }
 
     private void loadFile(String fileName) throws Exception {
+        // creates and binds the input streams with the parameter filename.
         fis = new FileInputStream(fileName);
         bis = new BufferedInputStream(fis);
     }
 
     private void loadSecretKey(String secretKey) throws Exception {
+        // creates and binds the secretKey from the paramter String.
         ois = new ObjectInputStream(new FileInputStream(secretKey));
         key = (SecretKey)ois.readObject();
     }
 
     private void createEncryptedFile(String outputFileName) throws Exception {
+        // takes the encrypted data and writes it to a file.
         setupOutput(outputFileName);
         byte[] inByte = new byte[1024];
         while(bis.available() != 0) {

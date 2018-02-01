@@ -13,7 +13,7 @@ import os.path
 import json
 import pprint
 
-
+# constants
 VIRUS_TOTAL_SCAN_URL = "https://www.virustotal.com/vtapi/v2/file/scan"
 VIRUS_TOTAL_RESCAN_URL = "https://www.virustotal.com/vtapi/v2/file/rescan"
 VIRUS_TOTAL_REPORT_URL = "https://www.virustotal.com/vtapi/v2/file/report"
@@ -23,12 +23,18 @@ result_data = []
 
 
 def write_to_file():
+    """Prints anything remaning in result_data list to the data file.
+    """
+
     print("writing remaining file data to disk...")
     with open('data', 'w') as out_file:
         json.dump(result_data, out_file)
 
 
 def prework():
+    """Reads in the data file if it exists.
+    """
+
     if os.path.isfile('data'):
         print("Loading existing file data...")
         with open('data', 'r') as in_file:
@@ -38,12 +44,30 @@ def prework():
 
 
 def file_in_data(checksum):
+    """[checks if the checksum is already locally known]
+    
+    Arguments:
+        checksum {[sha256 hash]} -- [A sha256 hash]
+    
+    Returns:
+        [bool] -- [if checksum in collection]
+    """
+
     for entry in result_data:
         if checksum in entry.values():
             return True
 
 
 def calculate_sha256(file):
+    """[takes a file and calculates the sha256 hash]
+    
+    Arguments:
+        file {[string]} -- [a string representing a filename or filepath]
+    
+    Returns:
+        [sha256 object] -- [a object from hashlib containing information about the incoming file]
+    """
+
     with open(file, mode='rb') as in_file:
         file_hash = hashlib.sha256()
         for buf in iter(partial(in_file.read, 128), b''):
@@ -52,6 +76,15 @@ def calculate_sha256(file):
 
 
 def request_file_report(checksum):
+    """[takes a checksum and requests a virus total api report related to it]
+    
+    Arguments:
+        checksum {[sha256hash]} -- [a sha256 hash used to request a file report]
+    
+    Returns:
+        [json] -- [json containing the report if it exits]
+    """
+
     params = {'apikey': API_KEY, 'resource': checksum}
     headers = {"Accept-Encoding": "gzip, deflate", "User-Agent": "gzip, Virus total api script IP stationary units ht17"}
     pp = pprint.PrettyPrinter(indent=4)
@@ -67,6 +100,12 @@ def request_file_report(checksum):
 
 
 def upload_file(file):
+    """[Uploads a file to the virus total API]
+    
+    Arguments:
+        file {[string]} -- [A string representing a file to upload]
+    """
+
     params = {'apikey': API_KEY}
     files = {'file': (file, open(file, 'rb'))}
     response = requests.post(VIRUS_TOTAL_SCAN_URL, files=files, params=params)
@@ -77,6 +116,12 @@ def upload_file(file):
 
 
 def process_files(file_list):
+    """[Takes a list of files and starts the script process]
+    
+    Arguments:
+        file_list {[list of strings]} -- [a list of strings representing files to process]
+    """
+
     print("Starting process of {} files..".format(len(file_list)))
     for file in file_list:
         file_hash = calculate_sha256(file)
@@ -92,6 +137,10 @@ def process_files(file_list):
                     print('File {} done uploading, rerun script at later file to check report.\n'.format(file))
 
 def present_result():
+    """prints out information about the results of the script, such as known reports 
+    and files still waiting for a report.
+    """
+
     if result_data:
         print('Printing entries with known reports:\n')
         pp = pprint.PrettyPrinter(indent=4)
@@ -112,6 +161,9 @@ def present_result():
 
 
 if __name__ == "__main__":
+    """starts the script!
+    """
+
     print("DUE TO THE LIMITATION OF VIRUS TOTAL API THIS SCRIPT WILL RAISE AN EXCEPTION IF THE NUMBER OF REQUESTS"
           " EXCEED 4 PER 60 SECOND PEROID")
     prework() # ladda data

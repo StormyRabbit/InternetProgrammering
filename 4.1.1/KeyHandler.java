@@ -1,29 +1,38 @@
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.io.*;
-import java.security.NoSuchAlgorithmException;
-
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.security.*;
 public class KeyHandler {
+    private KeyPair kp;
+    private KeyPairGenerator kpg;
 
-    private KeyGenerator keygen;
-    private SecretKey key;
     private ObjectOutputStream oos;
-    private FileOutputStream fos;
 
-    public KeyHandler(String[] args) throws NoSuchAlgorithmException, IOException {
-        keygen = KeyGenerator.getInstance("Blowfish");
-        keygen.init(448);
-        key = keygen.generateKey();
-        fos = new FileOutputStream(args[0]);
-        oos = new ObjectOutputStream(fos);
+    public KeyHandler(String[] args) throws Exception {
+        /**
+         * constructor, calls all the needed subroutines with the needed arguments.
+         */
+        setupKPG();
+        writeToKey(kp.getPrivate(), args[0]);
+        writeToKey(kp.getPublic(), args[1]);
+    }
+
+    private void setupKPG() throws Exception {
+        // setups and intialize the keypair generator object.
+        kpg = KeyPairGenerator.getInstance("DSA");
+        kpg.initialize(1024);
+        kp = kpg.generateKeyPair();
+    }
+    private void writeToKey(Key key, String s) throws Exception {
+        // creates a binary file of the provided Key object.
+        oos = new ObjectOutputStream(new FileOutputStream(s));
         oos.writeObject(key);
     }
 
     public static void main(String[] args) {
         try {
             new KeyHandler(args);
-        }catch(Exception exception) {
-            exception.printStackTrace();
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
 }

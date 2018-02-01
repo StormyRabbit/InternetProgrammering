@@ -10,12 +10,13 @@ public class Main {
     private JFrame window;
 
     public Main(String[] args) {
+        // main constructor, handles the inputed argument and starts the process of setting up all the objects.
         super();
         if(args.length > 0)
             port = Integer.valueOf(args[0]);
 
         window = new JFrame();
-        JLabel jl = new JLabel("OBS! detta fönster används enbart för titel baren, resterande information skrivs ut i terminalen");
+        JLabel jl = new JLabel("OBS! detta fönster används enbart för titelbaren, resterande information skrivs ut i terminalen");
         window.add(jl);
         window.setVisible(true);
         setupSocket();
@@ -25,6 +26,7 @@ public class Main {
     }
 
     public void updateTitle() {
+        // updates the windows title when a user connects / disconnects.
         StringBuilder sb = new StringBuilder();
         sb.append("IP: ");
         sb.append(serSocket.getInetAddress().getHostName());
@@ -36,11 +38,13 @@ public class Main {
     }
 
     private void listenForRequests() {
+        // main loop
         while(true)
             handleRequests();
     }
 
     private void handleRequests() {
+        // waits for a connection requests and then creates the client object and sends to the chatManager.
         try {
             Socket clientSocket = serSocket.accept();
             cm.addClient(new ConnectedClient(clientSocket, cm));
@@ -51,6 +55,7 @@ public class Main {
     }
 
     private void setupSocket() {
+        // creates and binds the Servers socket and catches any exceptions thrown.
         try {
             serSocket = new ServerSocket(port);
         }catch(IOException ioe) {

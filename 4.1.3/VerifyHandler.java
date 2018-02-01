@@ -17,6 +17,9 @@ public class VerifyHandler {
     private byte[] sigByte;
 
     public VerifyHandler(String[] args) throws Exception {
+        /**
+         * main constructor, takes the provided arguments and sends it to the needed subroutines.
+         */
         String data = args[0];
         String certFile = args[1];
         String sigFile = args[2];
@@ -26,6 +29,8 @@ public class VerifyHandler {
     }
 
     private void verifyData(String data) throws Exception  {
+        // loads the data from the input file 
+        // and uses the loaded signature to verify the data.
         bis = new BufferedInputStream(new FileInputStream(data));
         byte[] inByte = new byte[1024];
         while(bis.available() != 0) {
@@ -40,6 +45,9 @@ public class VerifyHandler {
     }
 
     private void loadSignature(String sigFile) throws Exception {
+        /**
+         * creates and binds the needed objects to load the sigFile.
+         */
         sig = Signature.getInstance(SIGNATURE_ENCODING);
         sig.initVerify(pk);
         fis = new FileInputStream(sigFile);
@@ -49,6 +57,9 @@ public class VerifyHandler {
     }
 
     private void loadCertificate(String certFile) throws Exception {
+        /**
+         * creates and loads the certFile and creates the cert and public key files.
+         */
         fis = new FileInputStream(certFile);
         certFact = CertificateFactory.getInstance("X.509");
         cert = certFact.generateCertificate(fis);

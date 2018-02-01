@@ -10,6 +10,9 @@ public class UDPSender {
     private InetAddress targetHost;
     private int port;
     public UDPSender(String[] args) {
+        /**
+         * main constructor, creates and binds the needed objects using the input arguments.
+         */
         try {
             dgs = new DatagramSocket();                    
             targetHost = InetAddress.getByName(args[1]);
@@ -19,6 +22,9 @@ public class UDPSender {
 
 
     public void sendPoint(Point p) {
+        /**
+         * sends a point to the connected host.
+         */
         byte[] byteArr = convertPointToByteArr(p);        
         try {
             DatagramPacket packet = new DatagramPacket(byteArr, byteArr.length, targetHost, port);            
@@ -29,6 +35,7 @@ public class UDPSender {
     }
 
     private byte[] convertPointToByteArr(Point p) {
+        // prepares a point for transmission by converting it to a string.
         StringBuilder sb = new StringBuilder();
         sb.append(p.x);
         sb.append(",");

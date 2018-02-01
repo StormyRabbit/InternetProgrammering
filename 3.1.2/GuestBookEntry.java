@@ -4,8 +4,14 @@ public class GuestBookEntry {
     private String homepage;
     private String message;
 
+    /**
+     * class used for representing a single post in the guestbook.
+     */
     @Override
     public boolean equals(Object o) {
+        /**
+         * equal method used for beign able to store the object in hashes.
+         */
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -19,6 +25,9 @@ public class GuestBookEntry {
 
     @Override
     public int hashCode() {
+        /**
+         * hashes the object for use in hashbased structures.
+         */
         int result = name.hashCode();
         result = 31 * result + email.hashCode();
         result = 31 * result + homepage.hashCode();

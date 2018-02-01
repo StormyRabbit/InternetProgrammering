@@ -8,6 +8,8 @@ public class ImageReceiver extends Thread{
     private ObjectInputStream in;
 
     public ImageReceiver(Socket s) {
+        // main constructor for the class responsibile for handeling incoming files.
+        // takes a socket to listen on as parameter and then starts the loop.
         this.s = s;
         running = true;
         this.start();
@@ -16,6 +18,10 @@ public class ImageReceiver extends Thread{
 
     @Override
     public void run() {
+        /**
+         * Threads main loop, listen for incoming Objects from the input stream
+         * notifies the client of the incoming data and then builds the file.
+         */
         try {
             in = new ObjectInputStream(s.getInputStream());
         }catch(Exception e) {

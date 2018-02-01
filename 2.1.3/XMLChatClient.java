@@ -16,13 +16,16 @@ public class XMLChatClient {
     private Scanner scan;
     private PrintWriter outWriter;
     private XMLChatInbox inbox;
+
     public XMLChatClient() throws Exception {
+        // main constructor, starts the process of the program
         initiateCommunication();
         readInUserInfo();
         startCLI();
     }
 
     private void initiateCommunication() throws Exception {
+        // creates and binds the different objects that manages communication.
         s = new Socket(ip, port);
         inbox = new XMLChatInbox(s);
         outWriter = new PrintWriter(s.getOutputStream(), true);
@@ -30,6 +33,7 @@ public class XMLChatClient {
     }
 
     private void readInUserInfo() {
+        // takes user from stdIn about the user for use in the chat.
         System.out.println("Enter name:");
         name = scan.nextLine();
         System.out.println("Enter E-mail address");
@@ -39,6 +43,7 @@ public class XMLChatClient {
     }
 
     private void startCLI() {
+        // process of taking the users input about the msg.
         while(true) {
             System.out.print("Enter message to send:");
             String msgBody = scan.nextLine();
@@ -56,6 +61,7 @@ public class XMLChatClient {
     }
 
     private Document createDocument(String msgBody) {
+        // builds the Document object used for transmission.
         DocType dt = new DocType("message",
                 "1//PW//Example//123",
                 "https://people.dsv.su.se/~pierre/courses/05_ass/ip1/2/2.1.3/message.dtd");

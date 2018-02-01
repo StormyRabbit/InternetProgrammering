@@ -11,6 +11,13 @@ public class DecryptHandler {
     private Cipher cipher;
 
     public DecryptHandler(String[] args) throws Exception {
+        /**
+         * constructor, takes launch parameters and starts decryption process.
+         * parameters: 
+         * 0 = encryptedData
+         * 1 = secretKey
+         * 2 = decryptedData
+         */
         loadEncryptedData(args[0]);
         loadKey(args[1]);
         setupCipher();
@@ -19,11 +26,15 @@ public class DecryptHandler {
     }
 
     private void setupCipher() throws Exception {
+        // setups the Cipher object
         cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);
     }
 
     private void writeDecryptedData(String arg) throws Exception {
+        /*
+            decrypts the data and writes it to the file represented by the param string.
+        */
         bos = new BufferedOutputStream(new FileOutputStream(arg));
         byte[] inByte = new byte[1024];
         while(bis.available() != 0) {
@@ -36,10 +47,12 @@ public class DecryptHandler {
     }
 
     private void loadEncryptedData(String arg) throws Exception {
+        // load a instream with the file from the String param.
         bis = new BufferedInputStream(new FileInputStream(arg));
     }
 
     private void loadKey(String arg) throws Exception {
+        // loads a key file and creates a secretKey object.
         ois = new ObjectInputStream(new FileInputStream(arg));
         key = (SecretKey)ois.readObject();
     }

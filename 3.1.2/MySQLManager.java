@@ -4,15 +4,18 @@ import java.util.List;
 
 public class MySQLManager {
 
-    private String url = "jdbc:mysql://mysql.dsv.su.se/lape5427";
-    private String username = "lape5427";
-    private String password = "wee0ohzooMeF";
+    private String url = "...";
+    private String username = "...";
+    private String password = "...";
     private Connection dbConnection;
 
     private String query = " insert into guestbook (name, email, homepage, message)"
             + " values (?, ?, ?, ?)";
 
     public MySQLManager() {
+        /**
+         * main constructor, loads db drivers
+         */
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         }catch(ClassNotFoundException cnfe) {
@@ -25,6 +28,7 @@ public class MySQLManager {
     }
 
     public List<GuestBookEntry> getAllEntries() {
+        // gathers all stored entries in a arrayList and returns it.
         connectToDB();
         List retArr = new ArrayList();
         try {
@@ -41,6 +45,7 @@ public class MySQLManager {
     }
 
     private GuestBookEntry convertResultToGBE(ResultSet rs) {
+        // takes a ResultSet and converts it to a GuestBookEntry object.
         GuestBookEntry gbe = new GuestBookEntry();
         try {
             gbe.setName(rs.getString("name"));
@@ -53,6 +58,7 @@ public class MySQLManager {
     }
 
     public void postNewEntry(GuestBookEntry gbe) {
+        // Creates a preparedStatement object and binds the parameter values to it and then posts it to the DB
         connectToDB();
         try {
             PreparedStatement pstm = dbConnection.prepareStatement(query);
@@ -68,6 +74,7 @@ public class MySQLManager {
     }
 
     private void closeDBConnection() {
+        // closes a db connection.
         try {
             dbConnection.close();
         }catch(SQLException se) {
@@ -76,6 +83,7 @@ public class MySQLManager {
     }
 
     private void connectToDB() {
+        // connects to the DB 
         try {
             dbConnection = DriverManager.getConnection(url, username, password);
         }catch(SQLException se) {

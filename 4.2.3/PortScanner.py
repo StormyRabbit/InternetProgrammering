@@ -9,6 +9,7 @@ from contextlib import closing
 class PortScanner:
 
     def __init__(self):
+        # constructor, declares the instance members.
         self.ports_to_scan = []
         self.addresses = []
         self.result = {}
@@ -25,6 +26,7 @@ class PortScanner:
         sys.exit(0)
 
     def save_result_to_file(self):
+        # takes the data in the result structure and writes it to the inputted file
         file = input("Enter filename:")
         with open(file, 'w') as outfile:
             json.dump(self.result, outfile)
@@ -32,6 +34,8 @@ class PortScanner:
         self.main_menu()
 
     def check_port(self, address, port):
+        # sends a connection handshake to the host
+        # takes the response and evaluate if the port was open or not.
         is_open = False
         with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
             sock.settimeout(2)
@@ -43,6 +47,7 @@ class PortScanner:
             self.result[address].update({port: is_open})
 
     def start_scan(self):
+        # takes input from stdin and then starts the port scanning procedure.
         if not self.addresses:
             print("No addresses in queue, add manually or from file from the main menu...")
             return
@@ -59,12 +64,14 @@ class PortScanner:
         self.main_menu()
 
     def handle_menu_input(self, choice):
+        # takes the choice input and calls the method related to it in the menu datastructure.
         try:
             self.menu_options[choice]()
         except KeyError:
             print("Invalid input")
 
     def main_menu(self):
+        # prints the menu options.
         os.system('clear')
         print('0 - Main menu')
         print('1 - Start scan')
@@ -78,6 +85,7 @@ class PortScanner:
         return
 
     def load_addresses_from_file(self):
+        # takes a file name from stdin and reads it line by line as ip addresses and adds it to the scan queue.
         print("Note this function requires that the infile is structured with one ip address per line.")
         file = input('enter file path:')
         if os.path.isfile(file):
@@ -87,12 +95,14 @@ class PortScanner:
         self.main_menu()
 
     def print_result(self):
+        # pretty prints the result data structure.
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(self.result)
         input("print complete, press enter to return to main menu...")
         self.main_menu()
 
     def manually_add_address(self):
+        # takes a singular address from stdin and puts it in the address structure.
         new_address = input("Enter address: ")
         try:
             socket.inet_aton(new_address)

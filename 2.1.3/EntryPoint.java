@@ -1,17 +1,13 @@
-import java.util.Scanner;
-
 public class EntryPoint {
-    private Scanner scan;
-    public EntryPoint() throws Exception {
-        new XMLChatClient();
+
+    /**
+     * Entrypoint class, only responsible for creating the GUI class.
+     */
+    public EntryPoint() {
+        new Gui();
     }
 
     public static void main(String[] args) {
-        try {
-            new EntryPoint();
-        }catch (Exception e) {
-
-        }
-
+        new EntryPoint();
     }
 }

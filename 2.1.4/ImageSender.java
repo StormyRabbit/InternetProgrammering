@@ -11,17 +11,22 @@ public class ImageSender  {
     private Queue<Storage> fileQueue;
 
     public ImageSender(Socket s) {
+        /**
+         * main constructor takes a socket as parameter used for transmitting files.
+         */
         fileQueue = new LinkedList<>();
         this.s = s;
 
     }
 
     public void addFileToQueue(String filePath) throws Exception {
+        // used for adding files to the transmission queue.
         Storage prepedFile = prepareFileForTransmission(filePath);
         fileQueue.add(prepedFile);
     }
 
     private Storage prepareFileForTransmission(String filePath) throws Exception {
+        // builds the Storage object used for transmission.
         System.out.printf("Preparing file %s for storage...\n", filePath);
         Path path = Paths.get(filePath);
         byte[] fileBytes = Files.readAllBytes(path);
@@ -29,6 +34,7 @@ public class ImageSender  {
     }
 
     public void manageOutQueue() {
+        // mainloop thats used for sending queued files.
         while(!fileQueue.isEmpty()) {
             try {
                 Storage outStorage = fileQueue.poll();

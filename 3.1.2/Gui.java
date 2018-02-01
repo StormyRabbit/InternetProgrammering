@@ -29,6 +29,10 @@ public class Gui extends JFrame {
 
     private Pattern p = Pattern.compile("<.*>");
     public Gui () {
+        /**
+         * main constructor imports the db driver, creates the UI
+         * and binds and creates the needed objects.
+         */
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception e) {}
@@ -43,6 +47,9 @@ public class Gui extends JFrame {
     }
 
     private void setupNewEntryPanel() {
+        /**
+         *  setups all the element for the JPanel responsible for new entries.
+         */
         newMsgPanel = new JPanel();
         nameLabel = new JLabel("Name");
         emailLabel = new JLabel("E-mailadress");
@@ -76,6 +83,7 @@ public class Gui extends JFrame {
     }
 
     private GuestBookEntry createGBE() {
+        // creates a new guestBookEntry object using data from the input elements.
         GuestBookEntry gbe = new GuestBookEntry();
 
         gbe.setName(scrubString(nameField.getText()));
@@ -86,6 +94,7 @@ public class Gui extends JFrame {
     }
 
     private String scrubString(String s) {
+        // used for scrubbing inputs from html kod.
         Matcher matcher = p.matcher(s);
         if(matcher.matches())
             return "censur";
@@ -93,17 +102,20 @@ public class Gui extends JFrame {
     }
 
     private void refreshGuestbook() {
+        // refreshes the list of guestbook entries.
         allEntriesTextArea.setText("");
         gbEntryList = mySQL.getAllEntries();
         fillGuestBookTextArea();
     }
 
     private void fillGuestBookTextArea() {
+        // writes all the stored entries to the textArea
         for(GuestBookEntry gbe : gbEntryList)
             allEntriesTextArea.append(gbe.toString());
     }
 
     private void setupAllEntriesPanel() {
+        // creates and binds all the objects used for the JPanel hosting all existing entries.
         allEntriesPanel = new JPanel();
         allEntriesTextArea = new JTextArea();
         allEntriesPanel.setLayout(new BorderLayout());

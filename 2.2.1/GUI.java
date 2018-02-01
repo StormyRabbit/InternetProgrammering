@@ -16,6 +16,9 @@ public class GUI extends JFrame implements guiObserver {
     }
 
     public GUI(String[] args) {
+        /**
+         * main construktor, creates the needed objects and configures and draws the JFrame.
+         */
         queue = new LinkedList();
         try {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -31,9 +34,13 @@ public class GUI extends JFrame implements guiObserver {
     }
 
     public void update(Point point) {
+        // sends an incoming point to the paper object.
         p.addPoint(point);
     }
 
+    /*
+    code below is supplyed by the assignment.
+    */
     class L1 extends MouseAdapter {
         public void mousePressed(MouseEvent me) {
             Point point = me.getPoint();

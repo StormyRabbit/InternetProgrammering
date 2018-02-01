@@ -18,6 +18,10 @@ public class SignHandler {
     private Certificate cert;
 
     public SignHandler(String[] args) throws Exception {
+        /**
+         * main constructor, takes the provided arguments and sends them to the relevant subroutines.
+         * 
+         */
         String keyStoreName = args[0];
         String keyStorePassword = args[1];
         String keyStoreAlias = args[2];
@@ -32,6 +36,9 @@ public class SignHandler {
     }
 
     private void loadCertificate(String certFile, String keyStoreAlias) throws Exception {
+        /**
+         * generates the certificate and stores it in certFile.
+         */
         cert = ks.getCertificate(keyStoreAlias);
         byte[] certBytes = cert.getEncoded();
         fis = new FileOutputStream(certFile);
@@ -40,6 +47,10 @@ public class SignHandler {
     }
 
     private void loadSignature(String data, String sigFile) throws Exception {
+        /**
+         * creates and binds the signature related objects.
+         * and then stores it in sigFile.
+         */
         sig = Signature.getInstance(ENCRYPTION_TYPE);
         sig.initSign(pk);
         bis = new BufferedInputStream(new FileInputStream(data));
@@ -56,6 +67,9 @@ public class SignHandler {
     }
 
     private void loadKey(String keystore, String keyStoreAlias, String keyStorePassword, String keyPassword) throws Exception {
+        /**
+         * creates and binds the needed objects to create the PrivateKey object.
+         */
         ks = KeyStore.getInstance("JKS");
         bis = new BufferedInputStream(new FileInputStream(keystore));
         ks.load(bis, keyStorePassword.toCharArray());

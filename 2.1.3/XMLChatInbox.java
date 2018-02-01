@@ -11,7 +11,9 @@ import java.net.Socket;
 public class XMLChatInbox extends Thread {
     private BufferedReader chatReader;
     private boolean running;
+
     public XMLChatInbox(Socket s) throws Exception {
+        // main constructor, binds and creates the reader object and starts the mainloop.
         chatReader = new BufferedReader(new InputStreamReader(s.getInputStream()));
         running = true;
         this.start();
@@ -19,6 +21,7 @@ public class XMLChatInbox extends Thread {
 
     @Override
     public void run() {
+        // main thread for incoming msgs. Verifies the XML format and prints the msg.
         while(running) {
             try {
                 SAXBuilder sb = new SAXBuilder();

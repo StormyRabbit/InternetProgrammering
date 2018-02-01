@@ -11,6 +11,10 @@ public class ChatClient {
     private int port = 2000;
     private ChatInbox ci;
 
+    /**
+     *  Default and only constructor, takes 
+     * input from args for configuration
+     */
     public ChatClient(String[] args) {
         setupCustomIP(args);
         setupSocket();
@@ -20,6 +24,7 @@ public class ChatClient {
     }
 
     private void setupSocket() {
+        // creates the socket object using either default ip/port or user specified data.
         try {
             chatSocket = new Socket(ip, port);
         }catch(IOException ioe){
@@ -29,6 +34,7 @@ public class ChatClient {
     }
 
     private void setupReader() {
+        // Creates the stream object and catches any exceptions.
         try {
             msgPW = new PrintWriter(new OutputStreamWriter(chatSocket.getOutputStream(), "ISO-8859-1"), true);
         }catch(IOException ioe) {
@@ -37,6 +43,7 @@ public class ChatClient {
     }
 
     private void setupCustomIP(String[] args) {
+        // used for setting custom ip and port inputed when the program launches.
         if(args.length > 0)
             ip = args[0];
         if(args.length > 1)
@@ -44,6 +51,7 @@ public class ChatClient {
     }
 
     private void userInputLoop() {
+        // starts and maintains the loop reading from stdIn.
         Scanner userInput = new Scanner(System.in);
         while(true){
             msgPW.println(userInput.nextLine());
@@ -53,6 +61,7 @@ public class ChatClient {
 
 
     public static void main(String[] args) {
+        // main method responsible for creating the CC object.
         new ChatClient(args);
 
     }
