@@ -37,5 +37,6 @@ All exercises done in java unless otherwise stated below.
 
 4.2.3 Attack! (python)
 
-5. Free final exam
+## Freechoice final exam ##
+[5. Port scanner done in python and javaScript](https://github.com/StormyRabbit/STRsPortScanner)
 
